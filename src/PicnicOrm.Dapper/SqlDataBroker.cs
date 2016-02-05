@@ -33,10 +33,8 @@ namespace PicnicOrm.Dapper
         /// </summary>
         /// <param name="connectionString"></param>
         public SqlDataBroker(string connectionString)
+            : this(connectionString, new SqlConnectionFactory())
         {
-            _connectionString = connectionString;
-
-            _sqlConnectionFactory = new SqlConnectionFactory();
         }
 
         /// <summary>
@@ -47,6 +45,7 @@ namespace PicnicOrm.Dapper
         {
             _connectionString = connectionString;
             _sqlConnectionFactory = sqlConnectionFactory;
+            _parentMappings = new Dictionary<int, IParentMapping>();
         }
 
         #endregion
