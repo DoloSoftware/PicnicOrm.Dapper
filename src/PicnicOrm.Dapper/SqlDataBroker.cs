@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Dapper;
 
@@ -52,6 +53,11 @@ namespace PicnicOrm.Dapper
 
         #region Interfaces
 
+        public void AddMapping(Type type)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// </summary>
         /// <param name="key"></param>
@@ -60,6 +66,50 @@ namespace PicnicOrm.Dapper
         {
             _parentMappings.Add(key, mapping);
         }
+
+        public void ExecuteStoreQuery(string sql)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<T> Query<T>(string sql) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<T> QueryGraph<T>(string sql) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<T> QueryGraph<T>(string sql, int parentMappingKey) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public T QueryScalar<T>(string sql) where T : IConvertible
+        {
+            throw new NotImplementedException();
+        }
+
+        public T QuerySingle<T>(string sql) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public T QuerySingleGraph<T>(string sql) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public T QuerySingleGraph<T>(string sql, int parentMappingKey) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region Public Methods
 
         /// <summary>
         /// </summary>
@@ -77,7 +127,7 @@ namespace PicnicOrm.Dapper
                 {
                     using (var multi = connection.QueryMultiple(sql))
                     {
-                        var mapping = (IParentMapping<T>) _parentMappings[parentMappingKey];
+                        var mapping = (IParentMapping<T>)_parentMappings[parentMappingKey];
                         list = mapping.Read(multi);
                     }
                 }
