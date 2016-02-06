@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using PicnicOrm.Dapper.Mapping;
 
 namespace PicnicOrm.Dapper
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public interface IDataBroker
     {
         #region Public Methods
