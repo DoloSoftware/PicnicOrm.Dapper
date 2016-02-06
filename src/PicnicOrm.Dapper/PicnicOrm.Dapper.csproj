@@ -45,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions.cs" />
+    <Compile Include="GridReaderWrapper.cs" />
+    <Compile Include="Interfaces\IGridReader.cs" />
     <Compile Include="Interfaces\ISqlConnectionFactory.cs" />
     <Compile Include="Factories\SqlConnectionFactory.cs" />
     <Compile Include="Interfaces\IDataBroker.cs" />

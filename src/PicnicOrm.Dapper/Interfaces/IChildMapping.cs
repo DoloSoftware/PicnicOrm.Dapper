@@ -13,10 +13,12 @@ namespace PicnicOrm.Dapper.Mapping
         #region Public Methods
 
         /// <summary>
+        /// 
         /// </summary>
         /// <param name="gridReader"></param>
-        /// <param name="items"></param>
-        void Map(SqlMapper.GridReader gridReader, IDictionary<int, T> parents);
+        /// <param name="parents"></param>
+        /// <param name="shouldContinueThroughEmptyTables"></param>
+        void Map(IGridReader gridReader, IDictionary<int, T> parents, bool shouldContinueThroughEmptyTables);
 
         #endregion
     }

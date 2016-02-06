@@ -6,7 +6,7 @@ namespace PicnicOrm.Dapper
     /// </summary>
     public static class Extensions
     {
-        #region IDictionary<TKey, T> Methods
+        #region Public Methods
 
         /// <summary>
         /// </summary>
@@ -15,8 +15,7 @@ namespace PicnicOrm.Dapper
         /// <param name="items"></param>
         /// <param name="linkDictionary"></param>
         /// <returns></returns>
-        public static IDictionary<TKey, IList<T>> ToGrouping<T, TKey>(this IDictionary<TKey, T> items,
-            IDictionary<TKey, List<TKey>> linkDictionary)
+        public static IDictionary<TKey, IList<T>> ToGrouping<T, TKey>(this IDictionary<TKey, T> items, IDictionary<TKey, List<TKey>> linkDictionary)
         {
             IDictionary<TKey, IList<T>> dictionary = new Dictionary<TKey, IList<T>>();
 

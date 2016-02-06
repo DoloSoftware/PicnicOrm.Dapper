@@ -125,7 +125,7 @@ namespace PicnicOrm.Dapper
             {
                 using (var connection = _sqlConnectionFactory.Create(_connectionString))
                 {
-                    using (var multi = connection.QueryMultiple(sql))
+                    using (var multi = new GridReaderWrapper(connection.QueryMultiple(sql)))
                     {
                         var mapping = (IParentMapping<T>)_parentMappings[parentMappingKey];
                         list = mapping.Read(multi);

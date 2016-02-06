@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Dapper;
-
 namespace PicnicOrm.Dapper.Mapping
 {
     /// <summary>
@@ -33,7 +31,8 @@ namespace PicnicOrm.Dapper.Mapping
         /// <param name="childKeySelector"></param>
         /// <param name="childParentKeySelector"></param>
         /// <param name="parentSetter"></param>
-        public OneToManyMapping(Func<TChild, int> childKeySelector, Func<TChild, int> childParentKeySelector, Action<TParent, IEnumerable<TChild>> parentSetter) : base(childKeySelector)
+        public OneToManyMapping(Func<TChild, int> childKeySelector, Func<TChild, int> childParentKeySelector, Action<TParent, IEnumerable<TChild>> parentSetter)
+            : base(childKeySelector)
         {
             _childParentKeySelector = childParentKeySelector;
             _parentSetter = parentSetter;
@@ -47,25 +46,41 @@ namespace PicnicOrm.Dapper.Mapping
         /// </summary>
         /// <param name="gridReader"></param>
         /// <param name="parents"></param>
-        public override void Map(SqlMapper.GridReader gridReader, IDictionary<int, TParent> parents)
+        /// <param name="shouldContinueThroughEmptyTables"></param>
+        public override void Map(IGridReader gridReader, IDictionary<int, TParent> parents, bool shouldContinueThroughEmptyTables)
         {
-            base.Map(gridReader, parents);
+            base.Map(gridReader, parents, shouldContinueThroughEmptyTables);
+            IDictionary<int, TChild> childDictionary = null;
 
             var children = gridReader.Read<TChild>();
 
-            if (children != null && children.Any())
+            if (children != null)
             {
-                //map our children to ourself before mapping ourself to our parent
-                if (_childMappings.Any())
-                {
-                    var childDictionary = children.ToDictionary(_childKeySelector);
-                    MapChildren(gridReader, childDictionary);
-                }
+                //if we have childrent then put them in a dictionary
+                childDictionary = children.ToDictionary(_childKeySelector);
+                MapParents(childDictionary, parents);
+            }
 
+            //map children with their children
+            MapChildren(gridReader, childDictionary, shouldContinueThroughEmptyTables);
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// </summary>
+        /// <param name="childDictionary"></param>
+        /// <param name="parents"></param>
+        private void MapParents(IDictionary<int, TChild> childDictionary, IDictionary<int, TParent> parents)
+        {
+            if (parents != null)
+            {
                 //group the children by their parents
-                var childGrouping = children.GroupBy(_childParentKeySelector).ToDictionary(grouping => grouping.Key, grouping => grouping.ToList());
+                var childGrouping = childDictionary.Values.GroupBy(_childParentKeySelector).ToDictionary(grouping => grouping.Key, grouping => grouping.ToList());
 
-                //iterate through each parent and map their child collection to them
+                //iterate through each parent and map parent/child relationship
                 foreach (var parentKey in parents.Keys)
                 {
                     if (childGrouping.ContainsKey(parentKey))

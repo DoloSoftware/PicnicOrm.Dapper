@@ -21,8 +21,9 @@ namespace PicnicOrm.Dapper.Mapping
         /// <summary>
         /// </summary>
         /// <param name="gridReader"></param>
+        /// <param name="shouldContinueThroughEmptyTables"></param>
         /// <returns></returns>
-        IEnumerable<T> Read(SqlMapper.GridReader gridReader);
+        IEnumerable<T> Read(IGridReader gridReader, bool shouldContinueThroughEmptyTables = true);
 
         #endregion
     }
