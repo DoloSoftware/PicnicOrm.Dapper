@@ -22,6 +22,8 @@ namespace PicnicOrm.Dapper.Demo.Models
 
         public Employer Employer { get; set; }
 
-        public List<Car> Cars { get; set; } 
+        public List<Car> Cars { get; set; }
+
+        public User() { Cars = new List<Car>(); }
     }
 }

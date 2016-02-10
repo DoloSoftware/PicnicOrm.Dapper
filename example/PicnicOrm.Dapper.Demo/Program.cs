@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 
 using PicnicOrm.Dapper.Demo.Models;
 using PicnicOrm.Dapper.Mapping;
@@ -20,7 +21,15 @@ namespace PicnicOrm.Dapper.Demo
             userEmployerMap.AddMapping(employerAddressMap);
 
             //Map Car to user
-            var userCarMap = new ManyToManyMapping<User, Car, UserCar>(car => car.Id, userCar => userCar.CarId, userCar => userCar.UserId, (user, cars) => user.Cars = cars.ToList());
+            var userCarMap = new ManyToManyMapping<User, Car, UserCar>(car => car.Id, userCar => userCar.CarId, userCar => userCar.UserId,
+                (user, cars) =>
+                {
+                    foreach (var car in cars)
+                    {
+                        user.Cars.Add(car);
+                        car.Users.Add(user);
+                    }
+                });
 
             //User Mapping
             var userMap = new ParentMapping<User>(user => user.Id);
@@ -31,9 +40,12 @@ namespace PicnicOrm.Dapper.Demo
             var dataBroker = new SqlDataBroker(@"Server=(localdb)\ProjectsV12;Database=DemoDatabase;Integrated security=True");
             dataBroker.AddMapping((int)ConfigType.User, userMap);
 
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
             var users = dataBroker.ExecuteStoredProcedure<User>("EXEC dbo.ReadUser", (int) ConfigType.User);
+            watch.Stop();
 
-            var test = users;
+            var test = watch.Elapsed;
         }
 
         #endregion

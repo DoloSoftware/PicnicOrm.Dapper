@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PicnicOrm.Dapper.Mapping
 {
@@ -71,16 +72,12 @@ namespace PicnicOrm.Dapper.Mapping
         /// <param name="shouldContinueThroughEmptyTables"></param>
         protected void MapChildren(IGridReader gridReader, IDictionary<int, TChild> childDictionary, bool shouldContinueThroughEmptyTables)
         {
-            //if we have nothing to map and we shouldn't continue reading because the query isn't reading the next table if the previous one had no results
-            //then return
-            if (childDictionary == null && !shouldContinueThroughEmptyTables)
+            if (shouldContinueThroughEmptyTables || (childDictionary != null && childDictionary.Any()))
             {
-                return;
-            }
-
-            foreach (var childMapping in _childMappings)
-            {
-                childMapping.Map(gridReader, childDictionary, shouldContinueThroughEmptyTables);
+                foreach (var childMapping in _childMappings)
+                {
+                    childMapping.Map(gridReader, childDictionary, shouldContinueThroughEmptyTables);
+                }
             }
         }
 

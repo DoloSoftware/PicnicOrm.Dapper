@@ -4,8 +4,7 @@ AS
 BEGIN
 
 	SELECT c.Id
-		  ,Make
-		  ,Model
+		  ,MakeModel
 		  ,[Year]
 	FROM dbo.[Car] c
 		JOIN @carIds i

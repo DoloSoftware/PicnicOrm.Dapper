@@ -52,10 +52,7 @@ namespace PicnicOrm.Dapper.Mapping
                 parentList = parents.ToList();
                 var parentDictionary = parentList.ToDictionary(_keySelector);
 
-                if (parentDictionary.Any())
-                {
-                    MapChildren(gridReader, parentDictionary, shouldContinueThroughEmptyTables);
-                }
+                MapChildren(gridReader, parentDictionary, shouldContinueThroughEmptyTables);
             }
 
             return parentList ?? new List<TParent>();

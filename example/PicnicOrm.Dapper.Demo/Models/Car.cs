@@ -10,10 +10,12 @@ namespace PicnicOrm.Dapper.Demo.Models
     {
         public int Id { get; set; }
 
-        public string Make { get; set; }
-
-        public string Model { get; set; }
+        public MakeModel MakeModel { get; set; }
 
         public int Year { get; set; }
+
+        public IList<User> Users { get; set; }
+        
+        public Car() { Users = new List<User>(); } 
     }
 }
