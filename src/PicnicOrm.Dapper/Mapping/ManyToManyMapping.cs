@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Dapper;
-
 namespace PicnicOrm.Dapper.Mapping
 {
     /// <summary>
     /// </summary>
-    /// <typeparam name="TParent"></typeparam>
-    /// <typeparam name="TChild"></typeparam>
+    /// <typeparam name="TParent">ex: User</typeparam>
+    /// <typeparam name="TChild">ex: Car</typeparam>
+    /// <typeparam name="TLink">ex: UserCar</typeparam>
     public class ManyToManyMapping<TParent, TChild, TLink> : BaseChildMapping<TParent, TChild>
         where TParent : class
         where TChild : class
@@ -49,36 +48,91 @@ namespace PicnicOrm.Dapper.Mapping
 
         #endregion
 
-        #region Override Methods
+        #region Public Methods
 
         /// <summary>
         /// </summary>
         /// <param name="gridReader"></param>
         /// <param name="parents"></param>
-        public override void Map(SqlMapper.GridReader gridReader, IDictionary<int, TParent> parents)
+        /// <param name="shouldContinueThroughEmptyTables"></param>
+        public override void Map(IGridReader gridReader, IDictionary<int, TParent> parents, bool shouldContinueThroughEmptyTables)
         {
-            base.Map(gridReader, parents);
+            base.Map(gridReader, parents, shouldContinueThroughEmptyTables);
+            IDictionary<int, TChild> childDictionary = null;
+
+            //Organize the link entities by parent key
+            var groupedLinks = GetGroupedLinks(gridReader);
+
+            if (groupedLinks != null || shouldContinueThroughEmptyTables)
+            {
+                var children = gridReader.Read<TChild>();
+
+                //map children and parents using the grouped links and return the children in a dictionary if there were any
+                childDictionary = Map(children, groupedLinks, parents);
+            }
+
+            MapChildren(gridReader, childDictionary, shouldContinueThroughEmptyTables);
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// </summary>
+        /// <param name="gridReader"></param>
+        /// <returns></returns>
+        private IDictionary<int, List<int>> GetGroupedLinks(IGridReader gridReader)
+        {
+            IDictionary<int, List<int>> groupedLinks = null;
 
             var links = gridReader.Read<TLink>();
-            if (links != null && links.Any())
-            {
-                var groupedLinks = links.GroupBy(_parentLinkKeySelector, _childLinkKeySelector).ToDictionary(grouping => grouping.Key, grouping => grouping.ToList());
-                var children = gridReader.Read<TChild>();
-                if (children != null && children.Any())
-                {
-                    var childrenDictionary = children.ToDictionary(_childKeySelector);
-                    MapChildren(gridReader, childrenDictionary);
 
-                    var manyToManyGroupedChildren = childrenDictionary.ToGrouping(groupedLinks);
-                    foreach (var parentKey in parents.Keys)
-                    {
-                        if (manyToManyGroupedChildren.ContainsKey(parentKey))
-                        {
-                            _parentSetter(parents[parentKey], manyToManyGroupedChildren[parentKey]);
-                        }
-                    }
+            if (links != null)
+            {
+                groupedLinks = links.GroupBy(_parentLinkKeySelector, _childLinkKeySelector).ToDictionary(grouping => grouping.Key, grouping => grouping.ToList());
+            }
+
+            return groupedLinks != null && groupedLinks.Any() ? groupedLinks : null;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="childDictionary"></param>
+        /// <param name="parents"></param>
+        /// <param name="groupedLinks"></param>
+        private void MapParents(IDictionary<int, TChild> childDictionary, IDictionary<int, TParent> parents, IDictionary<int, List<int>> groupedLinks)
+        {
+            if (parents == null)
+            {
+                return;
+            }
+
+            //Organize the children entities by parent key (children can belong to more than one parent)
+            var manyToManyGroupedChildren = childDictionary.ToGrouping(groupedLinks);
+
+            //Map the children collections to their parents
+            foreach (var parent in parents)
+            {
+                if (manyToManyGroupedChildren.ContainsKey(parent.Key))
+                {
+                    _parentSetter(parent.Value, manyToManyGroupedChildren[parent.Key]);
                 }
             }
+        }
+
+        private IDictionary<int, TChild> Map(IEnumerable<TChild> children, IDictionary<int, List<int>> groupedLinks, IDictionary<int, TParent> parents)
+        {
+            IDictionary<int, TChild> childDictionary = null;
+
+            if (children != null)
+            {
+                childDictionary = children.ToDictionary(_childKeySelector);
+
+                MapParents(childDictionary, parents, groupedLinks);
+            }
+
+            return childDictionary != null && childDictionary.Any() ? childDictionary : null;
         }
 
         #endregion

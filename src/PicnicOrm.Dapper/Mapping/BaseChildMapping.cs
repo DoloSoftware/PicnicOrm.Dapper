@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using Dapper;
+using System.Linq;
 
 namespace PicnicOrm.Dapper.Mapping
 {
@@ -44,8 +43,9 @@ namespace PicnicOrm.Dapper.Mapping
         /// <summary>
         /// </summary>
         /// <param name="gridReader"></param>
-        /// <param name="items"></param>
-        public virtual void Map(SqlMapper.GridReader gridReader, IDictionary<int, TParent> parents)
+        /// <param name="parents"></param>
+        /// <param name="shouldContinueThroughEmptyTables"></param>
+        public virtual void Map(IGridReader gridReader, IDictionary<int, TParent> parents, bool shouldContinueThroughEmptyTables)
         {
         }
 
@@ -68,12 +68,16 @@ namespace PicnicOrm.Dapper.Mapping
         /// <summary>
         /// </summary>
         /// <param name="gridReader"></param>
-        /// <param name="children"></param>
-        protected void MapChildren(SqlMapper.GridReader gridReader, IDictionary<int, TChild> childDictionary)
+        /// <param name="childDictionary"></param>
+        /// <param name="shouldContinueThroughEmptyTables"></param>
+        protected void MapChildren(IGridReader gridReader, IDictionary<int, TChild> childDictionary, bool shouldContinueThroughEmptyTables)
         {
-            foreach (var childMapping in _childMappings)
+            if (shouldContinueThroughEmptyTables || (childDictionary != null && childDictionary.Any()))
             {
-                childMapping.Map(gridReader, childDictionary);
+                foreach (var childMapping in _childMappings)
+                {
+                    childMapping.Map(gridReader, childDictionary, shouldContinueThroughEmptyTables);
+                }
             }
         }
 

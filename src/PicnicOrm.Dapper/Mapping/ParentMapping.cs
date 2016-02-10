@@ -2,41 +2,35 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Dapper;
-
 namespace PicnicOrm.Dapper.Mapping
 {
     /// <summary>
-    /// 
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class ParentMapping<T> : IParentMapping<T>
-        where T : class
+    /// <typeparam name="TParent"></typeparam>
+    public class ParentMapping<TParent> : IParentMapping<TParent>
+        where TParent : class
     {
         #region Fields
 
         /// <summary>
-        /// 
         /// </summary>
-        private readonly IList<IChildMapping<T>> _childMappings;
+        private readonly IList<IChildMapping<TParent>> _childMappings;
 
         /// <summary>
-        /// 
         /// </summary>
-        private readonly Func<T, int> _keySelector;
+        private readonly Func<TParent, int> _keySelector;
 
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="keySelector"></param>
-        public ParentMapping(Func<T, int> keySelector)
+        public ParentMapping(Func<TParent, int> keySelector)
         {
             _keySelector = keySelector;
-            _childMappings = new List<IChildMapping<T>>();
+            _childMappings = new List<IChildMapping<TParent>>();
         }
 
         #endregion
@@ -44,24 +38,24 @@ namespace PicnicOrm.Dapper.Mapping
         #region Interfaces
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="gridReader"></param>
+        /// <param name="shouldContinueThroughEmptyTables"></param>
         /// <returns></returns>
-        public IEnumerable<T> Read(SqlMapper.GridReader gridReader)
+        public IEnumerable<TParent> Read(IGridReader gridReader, bool shouldContinueThroughEmptyTables = true)
         {
-            var items = gridReader.Read<T>();
+            IList<TParent> parentList = null;
+            var parents = gridReader.Read<TParent>();
 
-            if (items != null && items.Any())
+            if (parents != null)
             {
-                var itemDictionary = items.ToDictionary(_keySelector);
-                foreach (var childMapping in _childMappings)
-                {
-                    childMapping.Map(gridReader, itemDictionary);
-                }
+                parentList = parents.ToList();
+                var parentDictionary = parentList.ToDictionary(_keySelector);
+
+                MapChildren(gridReader, parentDictionary, shouldContinueThroughEmptyTables);
             }
 
-            return items;
+            return parentList ?? new List<TParent>();
         }
 
         #endregion
@@ -69,12 +63,28 @@ namespace PicnicOrm.Dapper.Mapping
         #region Public Methods
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="childMapping"></param>
-        public void AddMapping(IChildMapping<T> childMapping)
+        public void AddMapping(IChildMapping<TParent> childMapping)
         {
             _childMappings.Add(childMapping);
+        }
+
+        #endregion
+
+        #region Protected Methods
+
+        /// <summary>
+        /// </summary>
+        /// <param name="gridReader"></param>
+        /// <param name="parents"></param>
+        /// <param name="shouldContinueThroughEmptyTables"></param>
+        protected void MapChildren(IGridReader gridReader, IDictionary<int, TParent> parents, bool shouldContinueThroughEmptyTables)
+        {
+            foreach (var childMapping in _childMappings)
+            {
+                childMapping.Map(gridReader, parents, shouldContinueThroughEmptyTables);
+            }
         }
 
         #endregion

@@ -4,15 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1628C1A7-8E22-4BDE-94B2-8E6B7FC77526}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{7A72E22B-5120-4309-BA74-FEB5387948CD}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PicnicOrm.Dapper</RootNamespace>
-    <AssemblyName>PicnicOrm.Dapper</AssemblyName>
+    <RootNamespace>PicnicOrm.Dapper.Demo</RootNamespace>
+    <AssemblyName>PicnicOrm.Dapper.Demo</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -30,10 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Dapper, Version=1.40.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\PicnicOrm.Dapper\packages\Dapper.1.42\lib\net45\Dapper.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,24 +43,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions.cs" />
-    <Compile Include="GridReaderWrapper.cs" />
-    <Compile Include="Interfaces\IGridReader.cs" />
-    <Compile Include="Interfaces\ISqlConnectionFactory.cs" />
-    <Compile Include="Factories\SqlConnectionFactory.cs" />
-    <Compile Include="Interfaces\IDataBroker.cs" />
-    <Compile Include="Mapping\BaseChildMapping.cs" />
-    <Compile Include="Interfaces\IChildMapping.cs" />
-    <Compile Include="Interfaces\IParentMapping.cs" />
-    <Compile Include="Mapping\ManyToManyMapping.cs" />
-    <Compile Include="Mapping\OneToManyMapping.cs" />
-    <Compile Include="Mapping\OneToOneMapping.cs" />
-    <Compile Include="Mapping\ParentMapping.cs" />
+    <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\Car.cs" />
+    <Compile Include="Models\Employer.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserCar.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SqlDataBroker.cs" />
+    <Compile Include="SectorEnum.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\PicnicOrm.Dapper\PicnicOrm.Dapper.csproj">
+      <Project>{1628c1a7-8e22-4bde-94b2-8e6b7fc77526}</Project>
+      <Name>PicnicOrm.Dapper</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

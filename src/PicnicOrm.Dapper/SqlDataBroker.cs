@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Dapper;
 
@@ -33,10 +34,8 @@ namespace PicnicOrm.Dapper
         /// </summary>
         /// <param name="connectionString"></param>
         public SqlDataBroker(string connectionString)
+            : this(connectionString, new SqlConnectionFactory())
         {
-            _connectionString = connectionString;
-
-            _sqlConnectionFactory = new SqlConnectionFactory();
         }
 
         /// <summary>
@@ -47,11 +46,17 @@ namespace PicnicOrm.Dapper
         {
             _connectionString = connectionString;
             _sqlConnectionFactory = sqlConnectionFactory;
+            _parentMappings = new Dictionary<int, IParentMapping>();
         }
 
         #endregion
 
         #region Interfaces
+
+        public void AddMapping(Type type)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// </summary>
@@ -61,6 +66,50 @@ namespace PicnicOrm.Dapper
         {
             _parentMappings.Add(key, mapping);
         }
+
+        public void ExecuteStoreQuery(string sql)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<T> Query<T>(string sql) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<T> QueryGraph<T>(string sql) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<T> QueryGraph<T>(string sql, int parentMappingKey) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public T QueryScalar<T>(string sql) where T : IConvertible
+        {
+            throw new NotImplementedException();
+        }
+
+        public T QuerySingle<T>(string sql) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public T QuerySingleGraph<T>(string sql) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public T QuerySingleGraph<T>(string sql, int parentMappingKey) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region Public Methods
 
         /// <summary>
         /// </summary>
@@ -76,9 +125,9 @@ namespace PicnicOrm.Dapper
             {
                 using (var connection = _sqlConnectionFactory.Create(_connectionString))
                 {
-                    using (var multi = connection.QueryMultiple(sql))
+                    using (var multi = new GridReaderWrapper(connection.QueryMultiple(sql)))
                     {
-                        var mapping = (IParentMapping<T>) _parentMappings[parentMappingKey];
+                        var mapping = (IParentMapping<T>)_parentMappings[parentMappingKey];
                         list = mapping.Read(multi);
                     }
                 }
