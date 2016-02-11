@@ -38,11 +38,11 @@ namespace PicnicOrm.Dapper.Demo
             userMap.AddMapping(userCarMap);
 
             var dataBroker = new SqlDataBroker(@"Server=(localdb)\ProjectsV12;Database=DemoDatabase;Integrated security=True");
-            dataBroker.AddMapping((int)ConfigType.User, userMap);
+            dataBroker.AddMapping<User>(userMap);
 
             Stopwatch watch = new Stopwatch();
             watch.Start();
-            var users = dataBroker.ExecuteStoredProcedure<User>("EXEC dbo.ReadUser", (int) ConfigType.User);
+            var users = dataBroker.ExecuteStoredProcedure<User>("dbo.ReadUser");
             watch.Stop();
 
             var test = watch.Elapsed;

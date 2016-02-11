@@ -63,7 +63,7 @@ namespace PicnicOrm.Dapper.Mapping
             //Organize the link entities by parent key
             var groupedLinks = GetGroupedLinks(gridReader);
 
-            if (groupedLinks != null || shouldContinueThroughEmptyTables)
+            if (shouldContinueThroughEmptyTables  || (groupedLinks != null && groupedLinks.Any()))
             {
                 var children = gridReader.Read<TChild>();
 

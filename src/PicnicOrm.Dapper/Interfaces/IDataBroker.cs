@@ -19,9 +19,11 @@ namespace PicnicOrm.Dapper
         void AddMapping(int key, IParentMapping mapping);
 
         /// <summary>
+        /// 
         /// </summary>
-        /// <param name="type"></param>
-        void AddMapping(Type type);
+        /// <typeparam name="T"></typeparam>
+        /// <param name="mapping"></param>
+        void AddMapping<T>(IParentMapping mapping);
 
         /// <summary>
         /// </summary>
@@ -78,6 +80,10 @@ namespace PicnicOrm.Dapper
         /// </summary>
         /// <param name="sql"></param>
         void ExecuteStoreQuery(string sql);
+
+        IEnumerable<T> ExecuteStoredProcedure<T>(string storedProcName) where T : class;
+
+        IEnumerable<T> ExecuteStoredProcedure<T>(string storedProcName, int configKey) where T : class;
 
         #endregion
     }
