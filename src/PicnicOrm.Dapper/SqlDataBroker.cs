@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Data;
 
 using Dapper;
 
@@ -23,11 +23,11 @@ namespace PicnicOrm.Dapper
         /// </summary>
         private readonly IDictionary<int, IParentMapping> _parentMappings;
 
-        private readonly IDictionary<Type, IParentMapping> _typeMapping; 
-
         /// <summary>
         /// </summary>
         private readonly ISqlConnectionFactory _sqlConnectionFactory;
+
+        private readonly IDictionary<Type, IParentMapping> _typeMapping;
 
         #endregion
 
@@ -37,9 +37,7 @@ namespace PicnicOrm.Dapper
         /// </summary>
         /// <param name="connectionString"></param>
         public SqlDataBroker(string connectionString)
-            : this(connectionString, new SqlConnectionFactory())
-        {
-        }
+            : this(connectionString, new SqlConnectionFactory()) { }
 
         /// <summary>
         /// </summary>
@@ -57,10 +55,7 @@ namespace PicnicOrm.Dapper
 
         #region Interfaces
 
-        public void AddMapping<T>(IParentMapping mapping)
-        {
-            _typeMapping.Add(typeof(T), mapping);
-        }
+        public void AddMapping<T>(IParentMapping mapping) { _typeMapping.Add(typeof(T), mapping); }
 
         /// <summary>
         /// </summary>
@@ -76,48 +71,21 @@ namespace PicnicOrm.Dapper
             _parentMappings.Add(key, mapping);
         }
 
-        public void ExecuteStoreQuery(string sql)
-        {
-            throw new NotImplementedException();
-        }
+        public void ExecuteStoreQuery(string sql) { throw new NotImplementedException(); }
 
-        public IEnumerable<T> Query<T>(string sql) where T : class
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerable<T> Query<T>(string sql) where T : class { throw new NotImplementedException(); }
 
-        public IEnumerable<T> QueryGraph<T>(string sql) where T : class
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerable<T> QueryGraph<T>(string sql) where T : class { throw new NotImplementedException(); }
 
-        public IEnumerable<T> QueryGraph<T>(string sql, int parentMappingKey) where T : class
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerable<T> QueryGraph<T>(string sql, int parentMappingKey) where T : class { throw new NotImplementedException(); }
 
-        public T QueryScalar<T>(string sql) where T : IConvertible
-        {
-            throw new NotImplementedException();
-        }
+        public T QueryScalar<T>(string sql) where T : IConvertible { throw new NotImplementedException(); }
 
-        public T QuerySingle<T>(string sql) where T : class
-        {
-            throw new NotImplementedException();
-        }
+        public T QuerySingle<T>(string sql) where T : class { throw new NotImplementedException(); }
 
-        public T QuerySingleGraph<T>(string sql) where T : class
-        {
-            throw new NotImplementedException();
-        }
+        public T QuerySingleGraph<T>(string sql) where T : class { throw new NotImplementedException(); }
 
-        public T QuerySingleGraph<T>(string sql, int parentMappingKey) where T : class
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
-
+        public T QuerySingleGraph<T>(string sql, int parentMappingKey) where T : class { throw new NotImplementedException(); }
 
         /// <summary>
         /// 
@@ -125,19 +93,17 @@ namespace PicnicOrm.Dapper
         /// <typeparam name="T"></typeparam>
         /// <param name="storedProcName"></param>
         /// <param name="parentMappingKey"></param>
+        /// <param name="parameters"></param>
         /// <returns></returns>
-        public IEnumerable<T> ExecuteStoredProcedure<T>(string storedProcName, int parentMappingKey) where T : class
+        public IEnumerable<T> ExecuteStoredProcedure<T>(string storedProcName, int parentMappingKey, DynamicParameters parameters = null) where T : class
         {
             IEnumerable<T> list = null;
 
             if (_parentMappings.ContainsKey(parentMappingKey))
             {
-                var sqlBuilder = new StringBuilder("EXEC ");
-                sqlBuilder.Append(storedProcName);
-
                 using (var connection = _sqlConnectionFactory.Create(_connectionString))
                 {
-                    using (var multi = new GridReaderWrapper(connection.QueryMultiple(sqlBuilder.ToString())))
+                    using (var multi = new GridReaderWrapper(connection.QueryMultiple(storedProcName, parameters, commandType: CommandType.StoredProcedure)))
                     {
                         var mapping = (IParentMapping<T>)_parentMappings[parentMappingKey];
                         list = mapping.Read(multi);
@@ -148,19 +114,22 @@ namespace PicnicOrm.Dapper
             return list;
         }
 
-        public IEnumerable<T> ExecuteStoredProcedure<T>(string storedProcName) where T : class
+        /// <summary>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="storedProcName"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public IEnumerable<T> ExecuteStoredProcedure<T>(string storedProcName, DynamicParameters parameters = null) where T : class
         {
             IEnumerable<T> list = null;
 
             var key = typeof(T);
             if (_typeMapping.ContainsKey(key))
             {
-                var sqlBuilder = new StringBuilder("EXEC ");
-                sqlBuilder.Append(storedProcName);
                 using (var connection = _sqlConnectionFactory.Create(_connectionString))
                 {
-
-                    using (var multi = new GridReaderWrapper(connection.QueryMultiple(sqlBuilder.ToString())))
+                    using (var multi = new GridReaderWrapper(connection.QueryMultiple(storedProcName, parameters, commandType: CommandType.StoredProcedure)))
                     {
                         var mapping = (IParentMapping<T>)_typeMapping[key];
                         list = mapping.Read(multi);
@@ -169,6 +138,8 @@ namespace PicnicOrm.Dapper
             }
 
             return list;
-        } 
+        }
+
+        #endregion
     }
 }

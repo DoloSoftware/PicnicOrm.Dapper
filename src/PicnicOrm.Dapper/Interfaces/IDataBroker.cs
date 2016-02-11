@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+
+using Dapper;
 
 using PicnicOrm.Dapper.Mapping;
 
@@ -81,9 +84,24 @@ namespace PicnicOrm.Dapper
         /// <param name="sql"></param>
         void ExecuteStoreQuery(string sql);
 
-        IEnumerable<T> ExecuteStoredProcedure<T>(string storedProcName) where T : class;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="storedProcName"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        IEnumerable<T> ExecuteStoredProcedure<T>(string storedProcName, DynamicParameters parameters = null) where T : class;
 
-        IEnumerable<T> ExecuteStoredProcedure<T>(string storedProcName, int configKey) where T : class;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="storedProcName"></param>
+        /// <param name="parameters"></param>
+        /// <param name="configKey"></param>
+        /// <returns></returns>
+        IEnumerable<T> ExecuteStoredProcedure<T>(string storedProcName, int configKey, DynamicParameters parameters = null) where T : class;
 
         #endregion
     }
