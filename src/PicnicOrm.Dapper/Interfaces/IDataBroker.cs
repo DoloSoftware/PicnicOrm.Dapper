@@ -92,7 +92,7 @@ namespace PicnicOrm.Dapper
         /// <param name="storedProcName"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        IEnumerable<T> ExecuteStoredProcedure<T>(string storedProcName, IEnumerable<IDbParameter> parameters = null) where T : class;
+        IEnumerable<T> ExecuteStoredProcedure<T>(string storedProcName, IList<IDbParameter> parameters = null) where T : class;
 
         /// <summary>
         /// 
@@ -102,7 +102,7 @@ namespace PicnicOrm.Dapper
         /// <param name="parameters"></param>
         /// <param name="configKey"></param>
         /// <returns></returns>
-        IEnumerable<T> ExecuteStoredProcedure<T>(string storedProcName, int configKey, IEnumerable<IDbParameter> parameters = null) where T : class;
+        IEnumerable<T> ExecuteStoredProcedure<T>(string storedProcName, int configKey, IList<IDbParameter> parameters = null) where T : class;
 
         #endregion
     }
