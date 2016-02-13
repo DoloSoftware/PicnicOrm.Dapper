@@ -112,7 +112,7 @@ namespace PicnicOrm.Dapper
         /// <param name="parentMappingKey"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public IEnumerable<T> ExecuteStoredProcedure<T>(string storedProcName, int mappingKey, IEnumerable<IDbParameter> parameters = null) where T : class
+        public IEnumerable<T> ExecuteStoredProcedure<T>(string storedProcName, int mappingKey, IList<IDbParameter> parameters = null) where T : class
         {
             IEnumerable<T> list = null;
 
@@ -138,7 +138,7 @@ namespace PicnicOrm.Dapper
         /// <param name="storedProcName"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public IEnumerable<T> ExecuteStoredProcedure<T>(string storedProcName, IEnumerable<IDbParameter> parameters = null) where T : class
+        public IEnumerable<T> ExecuteStoredProcedure<T>(string storedProcName, IList<IDbParameter> parameters = null) where T : class
         {
             IEnumerable<T> list = null;
 
