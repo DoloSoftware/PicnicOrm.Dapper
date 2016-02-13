@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using Dapper;
 
-namespace PicnicOrm.Dapper
+namespace PicnicOrm.Dapper.Data
 {
-    public class GridReaderWrapper : IGridReader, IDisposable
+    /// <summary>
+    /// 
+    /// </summary>
+    public class GridReaderWrapper : IGridReader
     {
         #region Fields
 

@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Moq;
 
+using PicnicOrm.Dapper.Data;
 using PicnicOrm.Dapper.Mapping;
 
 namespace PicnicOrm.Dapper.UnitTests.Mapping
@@ -22,7 +23,7 @@ namespace PicnicOrm.Dapper.UnitTests.Mapping
 
         #endregion
 
-        #region Setup Methods
+        #region Public Methods
 
         [TestInitialize]
         public void Initialize()
@@ -32,10 +33,6 @@ namespace PicnicOrm.Dapper.UnitTests.Mapping
 
             OneToManyMapping = new OneToManyMapping<ParentItem, OneToManyItem>(child => child.Id, child => child.ParentId, (parent, children) => parent.Children = children.ToList());
         }
-
-        #endregion
-
-        #region Test Methods
 
         [TestMethod]
         public void Map_HasNoResultsAndShouldContinueThroughEmptyTablesIsFalse_DoesNotMapChildren()
@@ -70,33 +67,16 @@ namespace PicnicOrm.Dapper.UnitTests.Mapping
         }
 
         [TestMethod]
-        public void Map_HasResultsAndShouldContinueThroughEmptyTablesIsFalse_MapsChildren()
-        {
-            //Arrange
-            var oneToManyItem = new OneToManyItem();
-            var oneToManyItemList = new List<OneToManyItem> {oneToManyItem};
-            MockGridReader.Setup(gridReader => gridReader.Read<OneToManyItem>()).Returns(oneToManyItemList);
-            OneToManyMapping.AddMapping(MockChildMapping.Object);
-            IDictionary<int, ParentItem> parents = null;
-
-            //Act
-            OneToManyMapping.Map(MockGridReader.Object, parents, false);
-
-            //Assert
-            MockChildMapping.Verify(childMapping => childMapping.Map(It.IsAny<IGridReader>(), It.IsAny<IDictionary<int, OneToManyItem>>(), It.IsAny<bool>()), Times.Once);
-        }
-
-        [TestMethod]
         public void Map_HasResultsAndParents_MapsParents()
         {
             //Arrange
-            var oneToManyItem = new OneToManyItem {Id = 5, ParentId = 1};
-            var oneToManyItem2 = new OneToManyItem {Id = 18, ParentId = 5};
-            var oneToManyItem3 = new OneToManyItem {Id = 23, ParentId = 1};
-            var oneToManyItemList = new List<OneToManyItem> {oneToManyItem, oneToManyItem2, oneToManyItem3};
+            var oneToManyItem = new OneToManyItem { Id = 5, ParentId = 1 };
+            var oneToManyItem2 = new OneToManyItem { Id = 18, ParentId = 5 };
+            var oneToManyItem3 = new OneToManyItem { Id = 23, ParentId = 1 };
+            var oneToManyItemList = new List<OneToManyItem> { oneToManyItem, oneToManyItem2, oneToManyItem3 };
             MockGridReader.Setup(gridReader => gridReader.Read<OneToManyItem>()).Returns(oneToManyItemList);
-            var parent = new ParentItem {ChildId = 5};
-            var parentDictionary = new Dictionary<int, ParentItem> {[1] = parent};
+            var parent = new ParentItem { ChildId = 5 };
+            var parentDictionary = new Dictionary<int, ParentItem> { [1] = parent };
 
             //Act
             OneToManyMapping.Map(MockGridReader.Object, parentDictionary, true);
@@ -106,6 +86,23 @@ namespace PicnicOrm.Dapper.UnitTests.Mapping
             Assert.AreEqual(2, parentDictionary[1].Children.Count);
             Assert.AreEqual(oneToManyItem, parentDictionary[1].Children[0]);
             Assert.AreEqual(oneToManyItem3, parentDictionary[1].Children[1]);
+        }
+
+        [TestMethod]
+        public void Map_HasResultsAndShouldContinueThroughEmptyTablesIsFalse_MapsChildren()
+        {
+            //Arrange
+            var oneToManyItem = new OneToManyItem();
+            var oneToManyItemList = new List<OneToManyItem> { oneToManyItem };
+            MockGridReader.Setup(gridReader => gridReader.Read<OneToManyItem>()).Returns(oneToManyItemList);
+            OneToManyMapping.AddMapping(MockChildMapping.Object);
+            IDictionary<int, ParentItem> parents = null;
+
+            //Act
+            OneToManyMapping.Map(MockGridReader.Object, parents, false);
+
+            //Assert
+            MockChildMapping.Verify(childMapping => childMapping.Map(It.IsAny<IGridReader>(), It.IsAny<IDictionary<int, OneToManyItem>>(), It.IsAny<bool>()), Times.Once);
         }
 
         #endregion

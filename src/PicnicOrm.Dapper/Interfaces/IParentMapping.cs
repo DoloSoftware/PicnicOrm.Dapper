@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-using Dapper;
+using PicnicOrm.Dapper.Data;
 
 namespace PicnicOrm.Dapper.Mapping
 {

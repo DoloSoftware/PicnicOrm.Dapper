@@ -7,6 +7,9 @@
           <CodeCoverage>
 
             <ModulePaths>
+              <Include>
+                <ModulePath>.*PicnicOrm\.Dapper\.dll$</ModulePath>
+              </Include>
               <Exclude>
                 <ModulePath>.*PicnicOrm\.Dapper\.UnitTests\.dll$</ModulePath>
               </Exclude>

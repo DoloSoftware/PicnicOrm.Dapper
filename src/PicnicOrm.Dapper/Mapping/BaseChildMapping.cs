@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using PicnicOrm.Dapper.Data;
+
 namespace PicnicOrm.Dapper.Mapping
 {
     /// <summary>
@@ -9,8 +11,7 @@ namespace PicnicOrm.Dapper.Mapping
     /// <typeparam name="TParent"></typeparam>
     /// <typeparam name="TChild"></typeparam>
     public abstract class BaseChildMapping<TParent, TChild> : IChildMapping<TParent>
-        where TParent : class
-        where TChild : class
+        where TParent : class where TChild : class
     {
         #region Fields
 

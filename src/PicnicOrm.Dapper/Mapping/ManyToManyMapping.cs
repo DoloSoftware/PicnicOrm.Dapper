@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using PicnicOrm.Dapper.Data;
+
 namespace PicnicOrm.Dapper.Mapping
 {
     /// <summary>
@@ -10,9 +12,7 @@ namespace PicnicOrm.Dapper.Mapping
     /// <typeparam name="TChild">ex: Car</typeparam>
     /// <typeparam name="TLink">ex: UserCar</typeparam>
     public class ManyToManyMapping<TParent, TChild, TLink> : BaseChildMapping<TParent, TChild>
-        where TParent : class
-        where TChild : class
-        where TLink : class
+        where TParent : class where TChild : class where TLink : class
     {
         #region Fields
 
@@ -63,7 +63,7 @@ namespace PicnicOrm.Dapper.Mapping
             //Organize the link entities by parent key
             var groupedLinks = GetGroupedLinks(gridReader);
 
-            if (shouldContinueThroughEmptyTables  || (groupedLinks != null && groupedLinks.Any()))
+            if (shouldContinueThroughEmptyTables || (groupedLinks != null && groupedLinks.Any()))
             {
                 var children = gridReader.Read<TChild>();
 
@@ -121,6 +121,13 @@ namespace PicnicOrm.Dapper.Mapping
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="children"></param>
+        /// <param name="groupedLinks"></param>
+        /// <param name="parents"></param>
+        /// <returns></returns>
         private IDictionary<int, TChild> Map(IEnumerable<TChild> children, IDictionary<int, List<int>> groupedLinks, IDictionary<int, TParent> parents)
         {
             IDictionary<int, TChild> childDictionary = null;

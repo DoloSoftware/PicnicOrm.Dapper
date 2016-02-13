@@ -4,6 +4,7 @@ using System.Data;
 
 using Dapper;
 
+using PicnicOrm.Dapper.Data;
 using PicnicOrm.Dapper.Mapping;
 
 namespace PicnicOrm.Dapper
@@ -26,63 +27,63 @@ namespace PicnicOrm.Dapper
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="mapping"></param>
-        void AddMapping<T>(IParentMapping mapping);
+        void AddMapping<T>(IParentMapping<T> mapping) where T : class;
 
-        /// <summary>
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="sql"></param>
-        /// <param name="parentMappingKey"></param>
-        /// <returns></returns>
-        IEnumerable<T> QueryGraph<T>(string sql, int parentMappingKey) where T : class;
+        ///// <summary>
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="sql"></param>
+        ///// <param name="parentMappingKey"></param>
+        ///// <returns></returns>
+        //IEnumerable<T> QueryGraph<T>(string sql, int parentMappingKey) where T : class;
 
-        /// <summary>
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="sql"></param>
-        /// <returns></returns>
-        IEnumerable<T> QueryGraph<T>(string sql) where T : class;
+        ///// <summary>
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="sql"></param>
+        ///// <returns></returns>
+        //IEnumerable<T> QueryGraph<T>(string sql) where T : class;
 
-        /// <summary>
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="sql"></param>
-        /// <returns></returns>
-        IEnumerable<T> Query<T>(string sql) where T : class;
+        ///// <summary>
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="sql"></param>
+        ///// <returns></returns>
+        //IEnumerable<T> Query<T>(string sql) where T : class;
 
-        /// <summary>
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="sql"></param>
-        /// <returns></returns>
-        T QuerySingle<T>(string sql) where T : class;
+        ///// <summary>
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="sql"></param>
+        ///// <returns></returns>
+        //T QuerySingle<T>(string sql) where T : class;
 
-        /// <summary>
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="sql"></param>
-        /// <returns></returns>
-        T QuerySingleGraph<T>(string sql) where T : class;
+        ///// <summary>
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="sql"></param>
+        ///// <returns></returns>
+        //T QuerySingleGraph<T>(string sql) where T : class;
 
-        /// <summary>
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="sql"></param>
-        /// <param name="parentMappingKey"></param>
-        /// <returns></returns>
-        T QuerySingleGraph<T>(string sql, int parentMappingKey) where T : class;
+        ///// <summary>
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="sql"></param>
+        ///// <param name="parentMappingKey"></param>
+        ///// <returns></returns>
+        //T QuerySingleGraph<T>(string sql, int parentMappingKey) where T : class;
 
-        /// <summary>
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="sql"></param>
-        /// <returns></returns>
-        T QueryScalar<T>(string sql) where T : IConvertible;
+        ///// <summary>
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="sql"></param>
+        ///// <returns></returns>
+        //T QueryScalar<T>(string sql) where T : IConvertible;
 
-        /// <summary>
-        /// </summary>
-        /// <param name="sql"></param>
-        void ExecuteStoreQuery(string sql);
+        ///// <summary>
+        ///// </summary>
+        ///// <param name="sql"></param>
+        //void ExecuteStoreQuery(string sql);
 
         /// <summary>
         /// 
@@ -91,7 +92,7 @@ namespace PicnicOrm.Dapper
         /// <param name="storedProcName"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        IEnumerable<T> ExecuteStoredProcedure<T>(string storedProcName, DynamicParameters parameters = null) where T : class;
+        IEnumerable<T> ExecuteStoredProcedure<T>(string storedProcName, IEnumerable<IDbParameter> parameters = null) where T : class;
 
         /// <summary>
         /// 
@@ -101,7 +102,7 @@ namespace PicnicOrm.Dapper
         /// <param name="parameters"></param>
         /// <param name="configKey"></param>
         /// <returns></returns>
-        IEnumerable<T> ExecuteStoredProcedure<T>(string storedProcName, int configKey, DynamicParameters parameters = null) where T : class;
+        IEnumerable<T> ExecuteStoredProcedure<T>(string storedProcName, int configKey, IEnumerable<IDbParameter> parameters = null) where T : class;
 
         #endregion
     }

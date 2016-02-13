@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using PicnicOrm.Dapper.Data;
+
 namespace PicnicOrm.Dapper.Mapping
 {
     /// <summary>
     /// </summary>
     public class OneToOneMapping<TParent, TChild> : BaseChildMapping<TParent, TChild>
-        where TParent : class
-        where TChild : class
+        where TParent : class where TChild : class
     {
         #region Fields
 
@@ -67,6 +68,11 @@ namespace PicnicOrm.Dapper.Mapping
 
         #region Private Methods
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="childDictionary"></param>
+        /// <param name="parents"></param>
         private void MapParents(IDictionary<int, TChild> childDictionary, IDictionary<int, TParent> parents)
         {
             if (parents == null)

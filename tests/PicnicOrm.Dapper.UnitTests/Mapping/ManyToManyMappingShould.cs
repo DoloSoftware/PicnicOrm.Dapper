@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Moq;
 
+using PicnicOrm.Dapper.Data;
 using PicnicOrm.Dapper.Mapping;
 
 namespace PicnicOrm.Dapper.UnitTests.Mapping
@@ -14,11 +15,11 @@ namespace PicnicOrm.Dapper.UnitTests.Mapping
     {
         #region Properties
 
+        public ManyToManyMapping<ParentItem, ManyToManyItem, ManyToManyLinker> ManyToManyMapping { get; set; }
+
         public Mock<IChildMapping<ManyToManyItem>> MockChildMapping { get; set; }
 
         public Mock<IGridReader> MockGridReader { get; set; }
-
-        public ManyToManyMapping<ParentItem, ManyToManyItem, ManyToManyLinker> ManyToManyMapping { get; set; }
 
         #endregion
 
@@ -35,10 +36,6 @@ namespace PicnicOrm.Dapper.UnitTests.Mapping
                 linker => linker.ParentId,
                 (parent, children) => parent.ManyToManyChildren = children.ToList());
         }
-
-        #endregion
-
-        #region Test Methods
 
         [TestMethod]
         public void Map_HasNoResultsAndShouldContinueThroughEmptyTablesIsFalse_DoesNotMapChildren()
@@ -67,26 +64,6 @@ namespace PicnicOrm.Dapper.UnitTests.Mapping
 
             //Act
             ManyToManyMapping.Map(MockGridReader.Object, parents, true);
-
-            //Assert
-            MockChildMapping.Verify(childMapping => childMapping.Map(It.IsAny<IGridReader>(), It.IsAny<IDictionary<int, ManyToManyItem>>(), It.IsAny<bool>()), Times.Once);
-        }
-
-        [TestMethod]
-        public void Map_HasResultsAndShouldContinueThroughEmptyTablesIsFalse_MapsChildren()
-        {
-            //Arrange
-            var manyToManyItem = new ManyToManyItem();
-            var manyToManyItemList = new List<ManyToManyItem> { manyToManyItem };
-            MockGridReader.Setup(gridReader => gridReader.Read<ManyToManyItem>()).Returns(manyToManyItemList);
-            var manyToManyLinker = new ManyToManyLinker();
-            var manyToManyLinkerList = new List<ManyToManyLinker> { manyToManyLinker };
-            MockGridReader.Setup(gridReader => gridReader.Read<ManyToManyLinker>()).Returns(manyToManyLinkerList);
-            ManyToManyMapping.AddMapping(MockChildMapping.Object);
-            IDictionary<int, ParentItem> parents = null;
-
-            //Act
-            ManyToManyMapping.Map(MockGridReader.Object, parents, false);
 
             //Assert
             MockChildMapping.Verify(childMapping => childMapping.Map(It.IsAny<IGridReader>(), It.IsAny<IDictionary<int, ManyToManyItem>>(), It.IsAny<bool>()), Times.Once);
@@ -122,6 +99,26 @@ namespace PicnicOrm.Dapper.UnitTests.Mapping
             Assert.AreEqual(2, parentDictionary[2].ManyToManyChildren.Count);
             Assert.IsTrue(parentDictionary[2].ManyToManyChildren.Contains(manyToManyItem2));
             Assert.IsTrue(parentDictionary[2].ManyToManyChildren.Contains(manyToManyItem3));
+        }
+
+        [TestMethod]
+        public void Map_HasResultsAndShouldContinueThroughEmptyTablesIsFalse_MapsChildren()
+        {
+            //Arrange
+            var manyToManyItem = new ManyToManyItem();
+            var manyToManyItemList = new List<ManyToManyItem> { manyToManyItem };
+            MockGridReader.Setup(gridReader => gridReader.Read<ManyToManyItem>()).Returns(manyToManyItemList);
+            var manyToManyLinker = new ManyToManyLinker();
+            var manyToManyLinkerList = new List<ManyToManyLinker> { manyToManyLinker };
+            MockGridReader.Setup(gridReader => gridReader.Read<ManyToManyLinker>()).Returns(manyToManyLinkerList);
+            ManyToManyMapping.AddMapping(MockChildMapping.Object);
+            IDictionary<int, ParentItem> parents = null;
+
+            //Act
+            ManyToManyMapping.Map(MockGridReader.Object, parents, false);
+
+            //Assert
+            MockChildMapping.Verify(childMapping => childMapping.Map(It.IsAny<IGridReader>(), It.IsAny<IDictionary<int, ManyToManyItem>>(), It.IsAny<bool>()), Times.Once);
         }
 
         #endregion

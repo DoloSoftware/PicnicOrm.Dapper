@@ -37,7 +37,7 @@ namespace PicnicOrm.Dapper.Demo
             userMap.AddMapping(userEmployerMap);
             userMap.AddMapping(userCarMap);
 
-            var dataBroker = new SqlDataBroker(@"Server=(localdb)\ProjectsV12;Database=DemoDatabase;Integrated security=True");
+            var dataBroker = new DapperDataBroker(@"Server=(localdb)\ProjectsV12;Database=DemoDatabase;Integrated security=True");
             dataBroker.AddMapping<User>(userMap);
 
             Stopwatch watch = new Stopwatch();
