@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-namespace PicnicOrm.Dapper
+namespace PicnicOrm.Dapper.Data
 {
-    public interface IGridReader
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IGridReader : IDisposable
     {
         #region Public Methods
 

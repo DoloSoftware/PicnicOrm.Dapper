@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-using Dapper;
+using PicnicOrm.Dapper.Data;
 
 namespace PicnicOrm.Dapper.Mapping
 {
@@ -13,7 +13,6 @@ namespace PicnicOrm.Dapper.Mapping
         #region Public Methods
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="gridReader"></param>
         /// <param name="parents"></param>

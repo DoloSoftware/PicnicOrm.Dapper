@@ -44,8 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\DbParameter.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="GridReaderWrapper.cs" />
+    <Compile Include="Data\GridReaderWrapper.cs" />
+    <Compile Include="Factories\DapperGridReaderFactory.cs" />
+    <Compile Include="Interfaces\IGridReaderFactory.cs" />
+    <Compile Include="Interfaces\IDbParameter.cs" />
     <Compile Include="Interfaces\IGridReader.cs" />
     <Compile Include="Interfaces\ISqlConnectionFactory.cs" />
     <Compile Include="Factories\SqlConnectionFactory.cs" />
@@ -58,7 +62,7 @@
     <Compile Include="Mapping\OneToOneMapping.cs" />
     <Compile Include="Mapping\ParentMapping.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SqlDataBroker.cs" />
+    <Compile Include="DapperDataBroker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Moq;
 
+using PicnicOrm.Dapper.Data;
 using PicnicOrm.Dapper.Mapping;
 
 namespace PicnicOrm.Dapper.UnitTests.Mapping
@@ -21,14 +22,14 @@ namespace PicnicOrm.Dapper.UnitTests.Mapping
 
         #endregion
 
-        #region Setup Methods
+        #region Public Methods
 
         [TestInitialize]
         public void Initialize()
         {
             MockChildMapping = new Mock<IChildMapping<OneToOneItem>>();
             MockGridReader = new Mock<IGridReader>();
-            
+
             OneToOneMapping = new OneToOneMapping<ParentItem, OneToOneItem>(child => child.Id,
                 parent => parent.ChildId,
                 (parent, child) =>
@@ -37,10 +38,6 @@ namespace PicnicOrm.Dapper.UnitTests.Mapping
                     child.Parent = parent;
                 });
         }
-
-        #endregion
-
-        #region Test Methods
 
         [TestMethod]
         public void Map_HasNoResultsAndShouldContinueThroughEmptyTablesIsFalse_DoesNotMapChildren()
@@ -75,11 +72,28 @@ namespace PicnicOrm.Dapper.UnitTests.Mapping
         }
 
         [TestMethod]
+        public void Map_HasResultsAndParents_MapsParents()
+        {
+            //Arrange
+            var oneToOneItem = new OneToOneItem { Id = 5 };
+            var oneToOneItemList = new List<OneToOneItem> { oneToOneItem };
+            MockGridReader.Setup(gridReader => gridReader.Read<OneToOneItem>()).Returns(oneToOneItemList);
+            var parent = new ParentItem { ChildId = 5 };
+            var parentDictionary = new Dictionary<int, ParentItem> { [1] = parent };
+
+            //Act
+            OneToOneMapping.Map(MockGridReader.Object, parentDictionary, true);
+
+            //Assert
+            Assert.AreEqual(oneToOneItem, parentDictionary[1].Child);
+        }
+
+        [TestMethod]
         public void Map_HasResultsAndShouldContinueThroughEmptyTablesIsFalse_MapsChildren()
         {
             //Arrange
             var oneToOneItem = new OneToOneItem();
-            var oneToOneItemList = new List<OneToOneItem> {oneToOneItem};
+            var oneToOneItemList = new List<OneToOneItem> { oneToOneItem };
             MockGridReader.Setup(gridReader => gridReader.Read<OneToOneItem>()).Returns(oneToOneItemList);
             OneToOneMapping.AddMapping(MockChildMapping.Object);
             IDictionary<int, ParentItem> parents = null;
@@ -89,23 +103,6 @@ namespace PicnicOrm.Dapper.UnitTests.Mapping
 
             //Assert
             MockChildMapping.Verify(childMapping => childMapping.Map(It.IsAny<IGridReader>(), It.IsAny<IDictionary<int, OneToOneItem>>(), It.IsAny<bool>()), Times.Once);
-        }
-
-        [TestMethod]
-        public void Map_HasResultsAndParents_MapsParents()
-        {
-            //Arrange
-            var oneToOneItem = new OneToOneItem {Id = 5};
-            var oneToOneItemList = new List<OneToOneItem> {oneToOneItem};
-            MockGridReader.Setup(gridReader => gridReader.Read<OneToOneItem>()).Returns(oneToOneItemList);
-            var parent = new ParentItem {ChildId = 5};
-            var parentDictionary = new Dictionary<int, ParentItem> {[1] = parent};
-
-            //Act
-            OneToOneMapping.Map(MockGridReader.Object, parentDictionary, true);
-
-            //Assert
-            Assert.AreEqual(oneToOneItem, parentDictionary[1].Child);
         }
 
         #endregion
