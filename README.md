@@ -13,15 +13,20 @@ Example usage:
 public void ConfigureDataBroker()
 {
 	//Map Address to User
-	var userAddressMap = new OneToOneMapping<User, Address>(address => address.Id, user => user.AddressId, (user, address) => user.Address = address);
+	var userAddressMap = new OneToOneMapping<User, Address>(address => address.Id, user => user.AddressId, 
+		(user, address) => user.Address = address);
 
 	//Map Address to Employer & Employer to User
-	var employerAddressMap = new OneToOneMapping<Employer, Address>(address => address.Id, employer => employer.AddressId, (employer, address) => employer.Address = address);
-	var userEmployerMap = new OneToOneMapping<User, Employer>(employer => employer.Id, user => user.EmployerId, (user, employer) => user.Employer = employer);
+	var employerAddressMap = new OneToOneMapping<Employer, Address>(address => address.Id, 
+		employer => employer.AddressId, (employer, address) => employer.Address = address);
+	var userEmployerMap = new OneToOneMapping<User, Employer>(employer => employer.Id, user => user.EmployerId,
+		(user, employer) => user.Employer = employer);
 	userEmployerMap.AddMapping(employerAddressMap);
 
 	//Map Car to user
-	var userCarMap = new ManyToManyMapping<User, Car, UserCar>(car => car.Id, userCar => userCar.CarId, userCar => userCar.UserId,
+	var userCarMap = new ManyToManyMapping<User, Car, UserCar>(car => car.Id, 
+		userCar => userCar.CarId, 
+		userCar => userCar.UserId,
 		(user, cars) =>
 		{
 			foreach (var car in cars)
