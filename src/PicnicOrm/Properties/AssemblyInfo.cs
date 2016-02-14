@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PicnicOrm.Dapper")]
+[assembly: AssemblyTitle("PicnicOrm")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("PicnicOrm.Dapper")]
+[assembly: AssemblyProduct("PicnicOrm")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("1628c1a7-8e22-4bde-94b2-8e6b7fc77526")]
+[assembly: Guid("1d348caa-b0d2-46e2-b2d3-5e921b7709dd")]
 
 // Version information for an assembly consists of the following four values:
 //

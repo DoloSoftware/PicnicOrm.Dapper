@@ -1,8 +1,12 @@
-﻿using System.Diagnostics;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
 
 using PicnicOrm.Dapper.Demo.Models;
-using PicnicOrm.Dapper.Mapping;
+using PicnicOrm.Dapper.Factories;
+using PicnicOrm.Data;
+using PicnicOrm.Mapping;
 
 namespace PicnicOrm.Dapper.Demo
 {
@@ -37,22 +41,19 @@ namespace PicnicOrm.Dapper.Demo
             userMap.AddMapping(userEmployerMap);
             userMap.AddMapping(userCarMap);
 
-            var dataBroker = new DapperDataBroker(@"Server=(localdb)\ProjectsV12;Database=DemoDatabase;Integrated security=True");
-            dataBroker.AddMapping<User>(userMap);
+            var dataBroker = new SqlDataBroker(@"Server=(localdb)\ProjectsV12;Database=DemoDatabase;Integrated security=True", new DapperGridReaderFactory());
+            dataBroker.AddMapping(userMap);
 
             Stopwatch watch = new Stopwatch();
-            watch.Start();
-            var users = dataBroker.ExecuteStoredProcedure<User>("dbo.ReadUser");
+            //watch.Start();
+            var parameterList = new List<IDbParameter>();
+            parameterList.Add(new DbParameter("BirthDate", DateTime.Parse("06-01-1975"), DbType.Date));
+            var users = dataBroker.ExecuteStoredProcedure<User>("dbo.ReadUser", parameterList);
             watch.Stop();
 
             var test = watch.Elapsed;
         }
 
         #endregion
-    }
-
-    public enum ConfigType
-    {
-        User
     }
 }

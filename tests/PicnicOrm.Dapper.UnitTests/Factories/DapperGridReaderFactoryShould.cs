@@ -1,38 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Dapper;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using PicnicOrm.Dapper.Data;
 using PicnicOrm.Dapper.Factories;
+using PicnicOrm.Data;
 
 namespace PicnicOrm.Dapper.UnitTests.Factories
 {
     [TestClass]
     public class DapperGridReaderFactoryShould
     {
+        #region Properties
+
         public DapperGridReaderFactory GridReaderFactory { get; set; }
 
-        [TestInitialize]
-        public void Initialize()
-        {
-            GridReaderFactory = new DapperGridReaderFactory();
-        }
+        #endregion
 
-        [TestMethod]
-        public void ConvertToDynamicParameters_PassNull_ReturnsNull()
-        {
-            //Act
-            var result = GridReaderFactory.ConvertToDynamicParameters(null);
-
-            //Assert
-            Assert.IsNull(result);
-        }
+        #region Public Methods
 
         [TestMethod]
         public void ConvertToDynamicParameters_PassEmptyList_ReturnsNull()
@@ -42,6 +27,16 @@ namespace PicnicOrm.Dapper.UnitTests.Factories
 
             //Act
             var result = GridReaderFactory.ConvertToDynamicParameters(parameters);
+
+            //Assert
+            Assert.IsNull(result);
+        }
+
+        [TestMethod]
+        public void ConvertToDynamicParameters_PassNull_ReturnsNull()
+        {
+            //Act
+            var result = GridReaderFactory.ConvertToDynamicParameters(null);
 
             //Assert
             Assert.IsNull(result);
@@ -65,5 +60,13 @@ namespace PicnicOrm.Dapper.UnitTests.Factories
             //Assert
             Assert.IsNotNull(result);
         }
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            GridReaderFactory = new DapperGridReaderFactory();
+        }
+
+        #endregion
     }
 }
