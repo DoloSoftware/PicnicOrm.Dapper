@@ -19,7 +19,6 @@ namespace PicnicOrm
         private readonly string _connectionString;
 
         /// <summary>
-        /// 
         /// </summary>
         private readonly IGridReaderFactory _gridReaderFactory;
 
@@ -33,14 +32,13 @@ namespace PicnicOrm
 
         /// <summary>
         /// </summary>
-        private readonly IDictionary<Type, IParentMapping> _typeMapping;
+        private readonly IDictionary<Type, IParentMapping> _typeMappings;
 
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="connectionString"></param>
         /// <param name="gridReaderFactory"></param>
@@ -60,7 +58,7 @@ namespace PicnicOrm
             _sqlConnectionFactory = sqlConnectionFactory;
             _gridReaderFactory = gridReaderFactory;
             _parentMappings = new Dictionary<int, IParentMapping>();
-            _typeMapping = new Dictionary<Type, IParentMapping>();
+            _typeMappings = new Dictionary<Type, IParentMapping>();
         }
 
         #endregion
@@ -85,10 +83,18 @@ namespace PicnicOrm
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="mapping"></param>
-        public void AddMapping<T>(IParentMapping<T> mapping) where T : class => _typeMapping.Add(typeof(T), mapping);
+        public void AddMapping<T>(IParentMapping<T> mapping) where T : class
+        {
+            var key = typeof(T);
+            if (_typeMappings.ContainsKey(key))
+            {
+                throw new ArgumentException($"Type: ({key}) has already been added.");
+            }
+
+            _typeMappings.Add(key, mapping);
+        }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="storedProcName"></param>
@@ -97,22 +103,12 @@ namespace PicnicOrm
         /// <returns></returns>
         public IEnumerable<T> ExecuteStoredProcedure<T>(string storedProcName, int mappingKey, IList<IDbParameter> parameters = null) where T : class
         {
-            IEnumerable<T> list = null;
-
             if (!_parentMappings.ContainsKey(mappingKey))
             {
                 throw new ArgumentException($"Parameter: ({nameof(mappingKey)}: {mappingKey}) is not a valid key.");
             }
-            using (var connection = _sqlConnectionFactory.Create(_connectionString))
-            {
-                using (var multi = _gridReaderFactory.Create(connection, storedProcName, parameters, commandType: CommandType.StoredProcedure))
-                {
-                    var mapping = (IParentMapping<T>)_parentMappings[mappingKey];
-                    list = mapping.Read(multi);
-                }
-            }
 
-            return list;
+            return ExecuteMapping<T>(storedProcName, _parentMappings[mappingKey], parameters);
         }
 
         /// <summary>
@@ -123,20 +119,36 @@ namespace PicnicOrm
         /// <returns></returns>
         public IEnumerable<T> ExecuteStoredProcedure<T>(string storedProcName, IList<IDbParameter> parameters = null) where T : class
         {
-            IEnumerable<T> list = null;
-
             var key = typeof(T);
-            if (!_typeMapping.ContainsKey(key))
+            if (!_typeMappings.ContainsKey(key))
             {
                 throw new ArgumentException($"Type: ({typeof(T)}) is not a registered Type.");
             }
 
+            return ExecuteMapping<T>(storedProcName, _typeMappings[key], parameters);
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="storedProcName"></param>
+        /// <param name="mapping"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        private IEnumerable<T> ExecuteMapping<T>(string storedProcName, IParentMapping mapping, IList<IDbParameter> parameters = null) where T : class
+        {
+            IEnumerable<T> list = null;
+
+            var castedMapping = (IParentMapping<T>)mapping;
             using (var connection = _sqlConnectionFactory.Create(_connectionString))
             {
-                using (var multi = _gridReaderFactory.Create(connection, storedProcName, parameters, commandType: CommandType.StoredProcedure))
+                using (var reader = _gridReaderFactory.Create(connection, storedProcName, parameters, commandType: CommandType.StoredProcedure))
                 {
-                    var mapping = (IParentMapping<T>)_typeMapping[key];
-                    list = mapping.Read(multi);
+                    list = castedMapping.Read(reader);
                 }
             }
 
@@ -145,21 +157,21 @@ namespace PicnicOrm
 
         #endregion
 
-        //}
-        //    throw new NotImplementedException();
+        //public void ExecuteStoreQuery(string sql)
         //{
-
-        //public IEnumerable<T> QueryGraph<T>(string sql) where T : class
-        //}
         //    throw new NotImplementedException();
-        //{
+        //}
 
         //public IEnumerable<T> Query<T>(string sql) where T : class
-        //}
-        //    throw new NotImplementedException();
         //{
+        //    throw new NotImplementedException();
+        //}
 
-        //public void ExecuteStoreQuery(string sql)
+        //public IEnumerable<T> QueryGraph<T>(string sql) where T : class
+        //{
+        //    throw new NotImplementedException();
+
+        //}
 
         //public IEnumerable<T> QueryGraph<T>(string sql, int parentMappingKey) where T : class
         //{

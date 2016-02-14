@@ -132,7 +132,7 @@ namespace PicnicOrm.Mapping
         {
             IDictionary<int, TChild> childDictionary = null;
 
-            if (children != null)
+            if (children != null && groupedLinks != null)
             {
                 childDictionary = children.ToDictionary(_childKeySelector);
 
