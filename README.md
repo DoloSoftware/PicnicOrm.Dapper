@@ -53,7 +53,7 @@ public class UserRepository
 	public IEnumerable<User> GetUsersBornAfter(DateTime date)
 	{
 		var parameterList = new List<IDbParameter>();
-		parameterList.Add(new DbParameter("BirthDate", DateTime.Parse("06-01-1975"), DbType.Date));
+		parameterList.Add(new DbParameter("BirthDate", date, DbType.Date));
 
 		return this.DataBroker.ExecuteStoredProcedure<User>("dbo.ReadUser", parameterList);
 	}
