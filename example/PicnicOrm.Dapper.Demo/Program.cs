@@ -47,7 +47,7 @@ namespace PicnicOrm.Dapper.Demo
             Stopwatch watch = new Stopwatch();
             //watch.Start();
             var parameterList = new List<IDbParameter>();
-            parameterList.Add(new DbParameter("BirthDate", DateTime.Parse("06-01-2030"), DbType.Date));
+            parameterList.Add(new DbParameter("BirthDate", DateTime.Parse("06-01-1975"), DbType.Date));
             var users = dataBroker.ExecuteStoredProcedure<User>("dbo.ReadUser", parameterList);
             watch.Stop();
 
