@@ -70,13 +70,13 @@
       <Project>{1628c1a7-8e22-4bde-94b2-8e6b7fc77526}</Project>
       <Name>PicnicOrm.Dapper</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\PicnicOrm.TestModels\PicnicOrm.TestModels.csproj">
-      <Project>{79fa1f38-d5be-4c96-bd16-ac4bbf55321b}</Project>
-      <Name>PicnicOrm.TestModels</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\PicnicOrm\PicnicOrm.csproj">
       <Project>{1d348caa-b0d2-46e2-b2d3-5e921b7709dd}</Project>
       <Name>PicnicOrm</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PicnicOrm.TestModels\PicnicOrm.TestModels.csproj">
+      <Project>{79fa1f38-d5be-4c96-bd16-ac4bbf55321b}</Project>
+      <Name>PicnicOrm.TestModels</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

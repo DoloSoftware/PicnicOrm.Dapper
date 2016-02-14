@@ -64,13 +64,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\PicnicOrm\PicnicOrm.csproj">
+      <Project>{1d348caa-b0d2-46e2-b2d3-5e921b7709dd}</Project>
+      <Name>PicnicOrm</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PicnicOrm.TestModels\PicnicOrm.TestModels.csproj">
       <Project>{79fa1f38-d5be-4c96-bd16-ac4bbf55321b}</Project>
       <Name>PicnicOrm.TestModels</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PicnicOrm\PicnicOrm.csproj">
-      <Project>{1d348caa-b0d2-46e2-b2d3-5e921b7709dd}</Project>
-      <Name>PicnicOrm</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
