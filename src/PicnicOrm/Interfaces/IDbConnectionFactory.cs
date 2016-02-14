@@ -1,10 +1,10 @@
-﻿using System.Data.SqlClient;
+﻿using System.Data;
 
 namespace PicnicOrm.Factories
 {
     /// <summary>
     /// </summary>
-    public interface ISqlConnectionFactory
+    public interface IDbConnectionFactory
     {
         #region Public Methods
 
@@ -12,7 +12,7 @@ namespace PicnicOrm.Factories
         /// </summary>
         /// <param name="connectionString"></param>
         /// <returns></returns>
-        SqlConnection Create(string connectionString);
+        IDbConnection Create(string connectionString);
 
         #endregion
     }

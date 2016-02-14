@@ -34,7 +34,7 @@ namespace PicnicOrm.UnitTests
         /// <summary>
         /// 
         /// </summary>
-        public Mock<ISqlConnectionFactory> MockSqlConnectionFactory { get; set; }
+        public Mock<IDbConnectionFactory> MockSqlConnectionFactory { get; set; }
 
         #endregion
 
@@ -124,7 +124,7 @@ namespace PicnicOrm.UnitTests
             var result = new SqlDataBroker("FakeString", MockGridReaderFactory.Object);
 
             var privateObject = new PrivateObject(result);
-            var connectionFactory = (ISqlConnectionFactory)privateObject.GetField("_sqlConnectionFactory");
+            var connectionFactory = (IDbConnectionFactory)privateObject.GetField("_sqlConnectionFactory");
 
             //Assert
             Assert.IsNotNull(connectionFactory);
@@ -133,7 +133,7 @@ namespace PicnicOrm.UnitTests
         [TestInitialize]
         public void Initialize()
         {
-            MockSqlConnectionFactory = new Mock<ISqlConnectionFactory>();
+            MockSqlConnectionFactory = new Mock<IDbConnectionFactory>();
             MockParentMapping = new Mock<IParentMapping<ParentItem>>();
             MockGridReaderFactory = new Mock<IGridReaderFactory>();
             SqlDataBroker = new SqlDataBroker("FakeConnectionString", MockSqlConnectionFactory.Object, MockGridReaderFactory.Object);

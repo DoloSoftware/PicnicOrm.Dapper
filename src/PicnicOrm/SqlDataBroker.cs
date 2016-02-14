@@ -29,7 +29,7 @@ namespace PicnicOrm
 
         /// <summary>
         /// </summary>
-        private readonly ISqlConnectionFactory _sqlConnectionFactory;
+        private readonly IDbConnectionFactory _sqlConnectionFactory;
 
         /// <summary>
         /// </summary>
@@ -54,7 +54,7 @@ namespace PicnicOrm
         /// <param name="connectionString"></param>
         /// <param name="sqlConnectionFactory"></param>
         /// <param name="gridReaderFactory"></param>
-        public SqlDataBroker(string connectionString, ISqlConnectionFactory sqlConnectionFactory, IGridReaderFactory gridReaderFactory)
+        public SqlDataBroker(string connectionString, IDbConnectionFactory sqlConnectionFactory, IGridReaderFactory gridReaderFactory)
         {
             _connectionString = connectionString;
             _sqlConnectionFactory = sqlConnectionFactory;

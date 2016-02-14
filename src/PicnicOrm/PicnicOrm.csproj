@@ -50,7 +50,7 @@
     <Compile Include="Interfaces\IGridReader.cs" />
     <Compile Include="Interfaces\IGridReaderFactory.cs" />
     <Compile Include="Interfaces\IParentMapping.cs" />
-    <Compile Include="Interfaces\ISqlConnectionFactory.cs" />
+    <Compile Include="Interfaces\IDbConnectionFactory.cs" />
     <Compile Include="Mapping\BaseChildMapping.cs" />
     <Compile Include="Mapping\ManyToManyMapping.cs" />
     <Compile Include="Mapping\OneToManyMapping.cs" />
