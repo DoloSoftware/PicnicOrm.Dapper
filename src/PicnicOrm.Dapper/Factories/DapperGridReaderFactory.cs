@@ -5,6 +5,8 @@ using System.Linq;
 using Dapper;
 
 using PicnicOrm.Dapper.Data;
+using PicnicOrm.Data;
+using PicnicOrm.Factories;
 
 namespace PicnicOrm.Dapper.Factories
 {
@@ -30,7 +32,7 @@ namespace PicnicOrm.Dapper.Factories
         {
             var dynamicParameters = ConvertToDynamicParameters(parameters);
 
-            return new GridReaderWrapper(dbConnection.QueryMultiple(storedProcName, dynamicParameters, dbTransaction, commandTimeout, commandType));
+            return new DapperGridReader(dbConnection.QueryMultiple(storedProcName, dynamicParameters, dbTransaction, commandTimeout, commandType));
         }
 
         #endregion
