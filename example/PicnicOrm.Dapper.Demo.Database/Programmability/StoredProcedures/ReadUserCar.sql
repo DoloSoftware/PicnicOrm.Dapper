@@ -13,6 +13,7 @@ BEGIN
 			
 	SELECT uc.UserId
 		  ,uc.CarId
+		  ,NULL AS [UserCar]
 	FROM dbo.[UserCar] uc
 		JOIN @userIds ui
 			ON uc.UserId = ui.Id
