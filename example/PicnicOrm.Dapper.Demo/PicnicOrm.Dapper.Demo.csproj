@@ -66,13 +66,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\PicnicOrm.Ado\PicnicOrm.Ado.csproj">
+      <Project>{26f7fa6c-f739-40b4-a08a-161566587e9d}</Project>
+      <Name>PicnicOrm.Ado</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\PicnicOrm.Dapper\PicnicOrm.Dapper.csproj">
       <Project>{1628c1a7-8e22-4bde-94b2-8e6b7fc77526}</Project>
       <Name>PicnicOrm.Dapper</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\PicnicOrm.Factory\PicnicOrm.Ado.csproj">
-      <Project>{26f7fa6c-f739-40b4-a08a-161566587e9d}</Project>
-      <Name>PicnicOrm.Ado</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\PicnicOrm\PicnicOrm.csproj">
       <Project>{1d348caa-b0d2-46e2-b2d3-5e921b7709dd}</Project>

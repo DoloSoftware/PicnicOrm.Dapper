@@ -10,9 +10,11 @@
               <Include>
                 <ModulePath>.*PicnicOrm\.Dapper\.dll$</ModulePath>
                 <ModulePath>.*PicnicOrm\.dll$</ModulePath>
+                <ModulePath>.*PicnicOrm\.Ado\.dll$</ModulePath>
               </Include>
               <Exclude>
                 <ModulePath>.*PicnicOrm\.Dapper\.UnitTests\.dll$</ModulePath>
+                <ModulePath>.*PicnicOrm\.UnitTests\.dll$</ModulePath>
               </Exclude>
             </ModulePaths>
 
