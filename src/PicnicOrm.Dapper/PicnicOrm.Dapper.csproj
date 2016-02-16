@@ -34,10 +34,6 @@
       <HintPath>..\packages\Dapper.1.50.0-beta7\lib\net45\Dapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="PicnicOrm, Version=0.9.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\PicnicOrm.0.9.0.1\lib\net45\PicnicOrm.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -53,6 +49,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PicnicOrm\PicnicOrm.csproj">
+      <Project>{1d348caa-b0d2-46e2-b2d3-5e921b7709dd}</Project>
+      <Name>PicnicOrm</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

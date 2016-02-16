@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PicnicOrm.TestModels", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PicnicOrm.FakeDataGenerator", "..\example\PicnicOrm.FakeDataGenerator\PicnicOrm.FakeDataGenerator.csproj", "{FC968779-3233-4CB3-8B67-C5BF45437638}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PicnicOrm.Ado", "PicnicOrm.Ado\PicnicOrm.Ado.csproj", "{26F7FA6C-F739-40B4-A08A-161566587E9D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,6 +76,10 @@ Global
 		{FC968779-3233-4CB3-8B67-C5BF45437638}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC968779-3233-4CB3-8B67-C5BF45437638}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC968779-3233-4CB3-8B67-C5BF45437638}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26F7FA6C-F739-40B4-A08A-161566587E9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26F7FA6C-F739-40B4-A08A-161566587E9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26F7FA6C-F739-40B4-A08A-161566587E9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26F7FA6C-F739-40B4-A08A-161566587E9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -44,7 +44,7 @@ namespace PicnicOrm.Dapper.Data
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public IEnumerable<T> Read<T>()
+        public IEnumerable<T> Read<T>() where T : class
         {
             return _gridReader.Read<T>();
         }

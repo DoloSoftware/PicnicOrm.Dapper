@@ -27,6 +27,7 @@ BEGIN
 		  ,BirthDate
 		  ,AddressId
 		  ,EmployerId
+		  ,NULL AS [User]
 	FROM dbo.[User]
 	WHERE BirthDate >= COALESCE(@BirthDate, BirthDate)
 

@@ -15,6 +15,7 @@ BEGIN
 		  ,EmployeeCount
 		  ,Sector
 		  ,AddressId
+		  ,NULL AS [Employer]
 	FROM dbo.[Employer] e
 		JOIN @employerIds i
 			ON e.Id = i.Id
