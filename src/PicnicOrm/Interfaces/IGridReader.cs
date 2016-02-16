@@ -15,7 +15,7 @@ namespace PicnicOrm.Data
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        IEnumerable<T> Read<T>();
+        IEnumerable<T> Read<T>() where T : class;
 
         #endregion
     }

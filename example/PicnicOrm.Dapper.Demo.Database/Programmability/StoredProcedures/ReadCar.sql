@@ -6,6 +6,7 @@ BEGIN
 	SELECT c.Id
 		  ,MakeModel
 		  ,[Year]
+		  ,NULL AS [Car]
 	FROM dbo.[Car] c
 		JOIN @carIds i
 			ON c.Id = i.Id

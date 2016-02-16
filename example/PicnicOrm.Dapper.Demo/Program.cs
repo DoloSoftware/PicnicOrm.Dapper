@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 
+using PicnicOrm.Ado.Factories;
+using PicnicOrm.Dapper.Demo.Factories;
 using PicnicOrm.Dapper.Demo.Models;
 using PicnicOrm.Dapper.Factories;
 using PicnicOrm.Data;
@@ -41,17 +43,32 @@ namespace PicnicOrm.Dapper.Demo
             userMap.AddMapping(userEmployerMap);
             userMap.AddMapping(userCarMap);
 
-            var dataBroker = new SqlDataBroker(@"Server=(localdb)\ProjectsV12;Database=DemoDatabase;Integrated security=True", new DapperGridReaderFactory());
+            //var dataBroker = new SqlDataBroker(@"Server=(localdb)\ProjectsV12;Database=DemoDatabase;Integrated security=True", new DapperGridReaderFactory());
+            var gridReaderFactory = new SqlGridReaderFactory();
+            gridReaderFactory.AddEntityFactory(new AddressFactory());
+            gridReaderFactory.AddEntityFactory(new CarFactory());
+            gridReaderFactory.AddEntityFactory(new EmployerFactory());
+            gridReaderFactory.AddEntityFactory(new UserFactory());
+            gridReaderFactory.AddEntityFactory(new UserCarFactory());
+
+            var dataBroker = new SqlDataBroker(@"Server=(localdb)\ProjectsV12;Database=DemoDatabase;Integrated security=True", gridReaderFactory);
             dataBroker.AddMapping(userMap);
 
-            Stopwatch watch = new Stopwatch();
-            //watch.Start();
-            var parameterList = new List<IDbParameter>();
-            parameterList.Add(new DbParameter("BirthDate", DateTime.Parse("06-01-1975"), DbType.Date));
-            var users = dataBroker.ExecuteStoredProcedure<User>("dbo.ReadUser", parameterList);
-            watch.Stop();
+            var totalTime = 0L;
+            for (int i = 0; i < 100; i++)
+            {
+                Stopwatch watch = new Stopwatch();
 
-            var test = watch.Elapsed;
+                watch.Start();
+                //var parameterList = new List<IDbParameter>();
+                //parameterList.Add(new DbParameter("BirthDate", DateTime.Parse("06-01-1975"), DbType.Date));
+                var users = dataBroker.ExecuteStoredProcedure<User>("dbo.ReadUser");
+                watch.Stop();
+
+                totalTime += watch.ElapsedMilliseconds;
+            }
+
+            var test = totalTime;
         }
 
         #endregion
