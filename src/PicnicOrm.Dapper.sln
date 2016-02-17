@@ -38,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PicnicOrm.FakeDataGenerator
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PicnicOrm.Ado", "PicnicOrm.Ado\PicnicOrm.Ado.csproj", "{26F7FA6C-F739-40B4-A08A-161566587E9D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PicnicOrm.Ado.UnitTests", "PicnicOrm.Ado.UnitTests\PicnicOrm.Ado.UnitTests.csproj", "{C94F4AE9-4C0C-43B4-B5E2-1300CB4A8EA4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +82,10 @@ Global
 		{26F7FA6C-F739-40B4-A08A-161566587E9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26F7FA6C-F739-40B4-A08A-161566587E9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26F7FA6C-F739-40B4-A08A-161566587E9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C94F4AE9-4C0C-43B4-B5E2-1300CB4A8EA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C94F4AE9-4C0C-43B4-B5E2-1300CB4A8EA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C94F4AE9-4C0C-43B4-B5E2-1300CB4A8EA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C94F4AE9-4C0C-43B4-B5E2-1300CB4A8EA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -91,5 +97,6 @@ Global
 		{472FDC0D-2E3C-4D18-9C3A-DC25696113C0} = {835E2D90-26C5-481E-9AB4-CBC5BFEFBD09}
 		{79FA1F38-D5BE-4C96-BD16-AC4BBF55321B} = {835E2D90-26C5-481E-9AB4-CBC5BFEFBD09}
 		{FC968779-3233-4CB3-8B67-C5BF45437638} = {A47C5B55-DAD0-4FE4-BD33-D0442316B5EB}
+		{C94F4AE9-4C0C-43B4-B5E2-1300CB4A8EA4} = {835E2D90-26C5-481E-9AB4-CBC5BFEFBD09}
 	EndGlobalSection
 EndGlobal
