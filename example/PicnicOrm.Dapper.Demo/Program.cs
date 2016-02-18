@@ -23,38 +23,56 @@ namespace PicnicOrm.Dapper.Demo
         static void Main(string[] args)
         {
             var dataBroker = new DapperDataBroker(@"Server=(localdb)\ProjectsV12;Database=DemoDatabase;Integrated security=True", new DapperGridReaderFactory());
-            Func<IGridReader, IEnumerable<User>> mapping = (gridReader) =>
+
+            var userList = dataBroker.ExecuteStoredProcedure<User>("dbo.ReadUser", LoadUsers);
+
+            var test = userList;
+        }
+
+        public static IEnumerable<User> LoadUsers(IGridReader gridReader)
+        {
+            var users = gridReader.Read<User>();
+            var userAddresses = gridReader.Read<Address>()?.ToDictionary(address => address.Id) ?? new Dictionary<int, Address>();
+            var employers = gridReader.Read<Employer>()?.ToDictionary(employer => employer.Id) ?? new Dictionary<int, Employer>();
+            var employerAddresses = gridReader.Read<Address>()?.ToDictionary(address => address.Id) ?? new Dictionary<int, Address>();
+            var userCars = gridReader.Read<UserCar>()?.GroupBy(userCar => userCar.UserId, userCar => userCar.CarId)
+                .ToDictionary(grouping => grouping.Key, grouping => grouping.ToList()) ?? new Dictionary<int, List<int>>();
+            var cars = gridReader.Read<Car>()?.ToDictionary(car => car.Id) ?? new Dictionary<int, Car>();
+
+            foreach (var employer in employers.Values)
+            {
+                if (employerAddresses.ContainsKey(employer.AddressId))
                 {
-                    var users = gridReader.Read<User>();
-                    var userAddresses = gridReader.Read<Address>().ToDictionary(address => address.Id);
-                    var employers = gridReader.Read<Employer>().ToDictionary(employer => employer.Id);
-                    var employerAddresses = gridReader.Read<Address>().ToDictionary(address => address.Id);
-                    var userCars = gridReader.Read<UserCar>().GroupBy(userCar => userCar.UserId, userCar => userCar.CarId).ToDictionary(grouping => grouping.Key, grouping => grouping.ToList());
-                    var cars = gridReader.Read<Car>().ToDictionary(car => car.Id);
+                    employer.Address = employerAddresses[employer.AddressId];
+                }
+            }
 
-                    foreach (var employer in employers.Values)
+            foreach (var user in users)
+            {
+                if (userAddresses.ContainsKey(user.AddressId))
+                {
+                    user.Address = userAddresses[user.AddressId];
+                }
+
+                if (employers.ContainsKey(user.EmployerId))
+                {
+                    user.Employer = employers[user.EmployerId];
+                }
+
+                if (userCars.ContainsKey(user.Id))
+                {
+                    foreach (var carId in userCars[user.Id])
                     {
-                        employer.Address = employerAddresses[employer.AddressId];
-                    }
-
-                    foreach (var user in users)
-                    {
-                        user.Address = userAddresses[user.AddressId];
-                        user.Employer = employers[user.EmployerId];
-
-                        foreach (var carId in userCars[user.Id])
+                        if (cars.ContainsKey(carId))
                         {
                             user.Cars.Add(cars[carId]);
                         }
                     }
+                }
+            }
 
-                    return users;
-                };
-
-            var userList = dataBroker.ExecuteStoredProcedure<User>("dbo.ReadUser", mapping);
-
-            var test = userList;
-        }
+            return users;
+        } 
 
         //static void Main(string[] args)
         //{
@@ -104,14 +122,6 @@ namespace PicnicOrm.Dapper.Demo
 
         //    //Map Car to user
         //    var userCarMap = new ManyToManyMapping<User, Car, UserCar>(car => car.Id, userCar => userCar.CarId, userCar => userCar.UserId, (user, cars) => user.Cars = cars.ToList());
-        //        (user, cars) =>
-        //        {
-        //            foreach (var car in cars)
-        //            {
-        //                user.Cars.Add(car);
-        //                car.Users.Add(user);
-        //            }
-        //        });
 
         //    //User Mapping
         //    var userMap = new ParentMapping<User>(user => user.Id);
