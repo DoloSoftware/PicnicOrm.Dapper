@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DapperDataBroker.cs" />
     <Compile Include="Data\DapperGridReader.cs" />
     <Compile Include="Factories\DapperGridReaderFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
