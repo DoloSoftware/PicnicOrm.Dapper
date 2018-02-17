@@ -20,6 +20,11 @@ namespace PicnicOrm.Ado.Data
 
         #region Constructors
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataSet"></param>
+        /// <param name="entityFactories"></param>
         public SqlGridReader(DataSet dataSet, IDictionary<Type, IEntityFactory> entityFactories)
         {
             _dataSet = dataSet;
@@ -37,6 +42,9 @@ namespace PicnicOrm.Ado.Data
 
         #region Interfaces
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Dispose()
         {
             _dataSet = null;
@@ -44,6 +52,11 @@ namespace PicnicOrm.Ado.Data
             _tablesRead = null;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public IEnumerable<T> Read<T>() where T : class
         {
             var list = new List<T>();
@@ -71,6 +84,11 @@ namespace PicnicOrm.Ado.Data
 
         #region Private Methods
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <returns></returns>
         private DataTable GetTable(string tableName)
         {
             if (_tablesRead.ContainsKey(tableName))
@@ -90,17 +108,12 @@ namespace PicnicOrm.Ado.Data
             }
 
             return _dataTables[tableName];
-
-            //foreach (DataTable table in _dataSet.Tables)
-            //{
-            //    if (table.TableName.Equals(tableName))
-            //    {
-            //        returnTable = table;
-            //        break;
-            //    }
-            //}
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataSet"></param>
         private void ToNamedTableSet(DataSet dataSet)
         {
             var usedNames = new Dictionary<string, int>();
